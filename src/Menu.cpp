@@ -418,8 +418,67 @@ void Menu::exibirMenu()
         }
             case 3: ///Cenario 3
             {
+            int numeroN = 0; //armazena o número de N's do arquivo
+            ifstream infile ("entrada.txt");
+            int i=0;
 
+            while(infile)
+            {
+                if(i==0)
+                {
+                    string s;
+                    getline(infile,s);
+                    numeroN = atoi(s.c_str()); //pega o número de N's que estão no arquivo.
+                    break;
+                }
             }
+
+            int vetN[numeroN]; //cria um vetor para salvar os N's que são quantidades de números que serão testados.
+
+            while(infile)
+            {
+                string s;
+                if(i==0)  //nao pega o primeiro elemento, pois ele indica a quantidade de N's.
+                {
+                }
+                else
+                {
+                    if(!getline(infile,s))
+                        break;
+                    vetN[i-1]=atoi(s.c_str()); //pega o valor de N e salva no vetor vetN.
+
+
+                }
+                i++;
+            }
+            infile.close();
+            std::ofstream saida ("saidaVP.txt");
+            vector<registro> lista;
+            vector<string> linha;
+            vector<vector<string>> linhas;
+            vector<registro>::iterator it;
+
+            double tempoTotal = 0;
+            unsigned long int vetorTotalBytes[numeroN];
+            unsigned long int vetorTotalBytesComp[numeroN];
+            double vetorTempoTotal[numeroN];
+            std::chrono::time_point<std::chrono::system_clock> start, end;
+             ArvoreVP arvore;
+            for(int k=0; k<numeroN; k++)
+            {
+                saida<<"k = "<<k<<endl;
+                leitura(lista,linha, linhas,vetN[k]);
+                for(it = lista.begin(); it != lista.end(); ++it)
+                {
+                    registro regAux = *it;
+                    saida << "USUARIO:  " << regAux.getUser() << endl;
+                    arvore.Inserir(*it);
+                }
+            }
+
+            break;
+            }
+
             case 4: ///Cenario 4
             {
 

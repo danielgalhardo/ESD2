@@ -9,6 +9,7 @@ ArvoreVP::ArvoreVP()
     this->raiz = NULL;
     comparacoesIns=0;
     trocasIns=0;
+    comparacoesBusca=0;
 }
 
 ArvoreVP::~ArvoreVP()
@@ -251,10 +252,12 @@ void ArvoreVP::bucaNo(int id, string user)
 
 NoVP* ArvoreVP::auxBuscaNo(NoVP *raiz, registro *reg)
 {
+    comparacoesBusca++;
     if(raiz == NULL || raiz->getGameId() == reg->getId())
     {
         return raiz;
     }
+    comparacoesBusca++;
     if(raiz->getGameId() < reg->getId())
     {
         return auxBuscaNo(raiz->direita,reg);
@@ -270,4 +273,8 @@ int ArvoreVP::getTrocasIns()
 int ArvoreVP::getComparacoesIns()
 {
     return comparacoesIns;
+}
+
+int ArvoreVP::getComparacoesBusca(){
+    return comparacoesBusca;
 }

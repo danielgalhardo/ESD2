@@ -18,6 +18,7 @@ public:
     NoVP* auxBuscaNo(NoVP *raiz, registro *reg);
     int  getTrocasIns();
     int  getComparacoesIns();
+    int getComparacoesBusca();
 
 protected:
     void rotacionaEsquerda(NoVP *&,NoVP *& );
@@ -26,7 +27,7 @@ protected:
 
 private:
     NoVP *raiz;
-    int comparacoesIns, trocasIns;
+    int comparacoesIns, trocasIns,comparacoesBusca;
 
 };
 
