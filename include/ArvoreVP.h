@@ -14,7 +14,7 @@ public:
     void auxEmOrdem(NoVP *raiz);
     NoVP* AVPInserir(NoVP *raiz, NoVP *pt);
     void auxNivelOrdem(NoVP *raiz);
-    NoVP* bucaNo(int id, string user);
+    void bucaNo(int id, string user);
     NoVP* auxBuscaNo(NoVP *raiz, registro *reg);
     int  getTrocasIns();
     int  getComparacoesIns();

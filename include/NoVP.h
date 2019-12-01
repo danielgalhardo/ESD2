@@ -1,7 +1,7 @@
 #ifndef NOVP_H
 #define NOVP_H
 #include "registro.h"
-#include "menu.h"
+#include "Menu.h"
 
 using namespace std;
 
