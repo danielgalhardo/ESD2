@@ -3,6 +3,8 @@
 #define NANHO 8
 #include <iostream>
 #include "LZW.h"
+#include "arvoreB.h"
+#include "bNode.h"
 #include <stdlib.h>
 #include <fstream>
 #include <vector>
@@ -24,7 +26,7 @@ void Menu::leitura(vector<registro>& lista, vector<string>& linha, vector<vector
 
     fstream file, bgg;
     if(N>17065)
-        cout<<"Nanho especificado maior do que o arquivo games_detailed_info.csv"<<endl;
+        cout<<"tamanho especificado maior do que o arquivo games_detailed_info.csv"<<endl;
     file.open("games_detailed_info.csv", ios::in);
     bgg.open("bgg-13m-reviews.csv", ios::in);
     //cout<<"abrindo bgg-13m-reviews.csv"<<endl;
@@ -418,71 +420,138 @@ void Menu::exibirMenu()
         }
             case 3: ///Cenario 3
             {
-            int numeroN = 0; //armazena o número de N's do arquivo
-            ifstream infile ("entrada.txt");
-            int i=0;
 
-            while(infile)
-            {
-                if(i==0)
-                {
-                    string s;
-                    getline(infile,s);
-                    numeroN = atoi(s.c_str()); //pega o número de N's que estão no arquivo.
-                    break;
-                }
             }
-
-            int vetN[numeroN]; //cria um vetor para salvar os N's que são quantidades de números que serão testados.
-
-            while(infile)
-            {
-                string s;
-                if(i==0)  //nao pega o primeiro elemento, pois ele indica a quantidade de N's.
-                {
-                }
-                else
-                {
-                    if(!getline(infile,s))
-                        break;
-                    vetN[i-1]=atoi(s.c_str()); //pega o valor de N e salva no vetor vetN.
-
-
-                }
-                i++;
-            }
-            infile.close();
-            std::ofstream saida ("saidaVP.txt");
-            vector<registro> lista;
-            vector<string> linha;
-            vector<vector<string>> linhas;
-            vector<registro>::iterator it;
-
-            double tempoTotal = 0;
-            unsigned long int vetorTotalBytes[numeroN];
-            unsigned long int vetorTotalBytesComp[numeroN];
-            double vetorTempoTotal[numeroN];
-            std::chrono::time_point<std::chrono::system_clock> start, end;
-             ArvoreVP arvore;
-            for(int k=0; k<numeroN; k++)
-            {
-                saida<<"k = "<<k<<endl;
-                leitura(lista,linha, linhas,vetN[k]);
-                for(it = lista.begin(); it != lista.end(); ++it)
-                {
-                    registro regAux = *it;
-                    saida << "USUARIO:  " << regAux.getUser() << endl;
-                    arvore.Inserir(*it);
-                }
-            }
-
-            break;
-            }
-
             case 4: ///Cenario 4
             {
+		int numeroN = 0; //armazena o número de N's do arquivo
+            	ifstream infile ("entrada.txt");
+            	int i=0;
 
-            }
+            	while(infile)
+            	{
+
+                    if(i==0)
+                    {
+                    	string s;
+                    	getline(infile,s);
+                    	numeroN = atoi(s.c_str()); //pega o número de N's que estão no arquivo.
+                    	break;
+                    }
+            	}
+
+            	int vetN[numeroN]; //cria um vetor para salvar os N's que são quantidades de números que serão testados.
+
+            	while(infile)
+            	{
+
+                    string s;
+                    if(i==0)  //nao pega o primeiro elemento, pois ele indica a quantidade de N's.
+                    {
+                    }
+                    else
+                    {
+                       	if(!getline(infile,s))
+                       	    break;
+                         vetN[i-1]=atoi(s.c_str()); //pega o valor de N e salva no vetor vetN.
+
+
+                    }
+                    i++;
+                 }
+                 infile.close();
+                 std::ofstream saida ("saidaB1.txt");
+		 std::ofstream saida2("saidaB2.txt");
+                 vector<registro> lista;
+                 vector<string> linha;
+                 vector<vector<string>> linhas;
+                 vector<registro>::iterator it;
+                 
+	         double tempoTotal1 = 0;
+		 double tempoTotal2 = 0;
+                 double vetorTempoTotal[numeroN];
+                 long int troca = 0;
+		 long int comp = 0;
+		 long int vetorTroca[numeroN];
+		 long int vetorComp[numeroN];
+		 double vetorTempoTotal2[numeroN];
+                 long int troca2 = 0;
+                 long int comp2 = 0;
+                 long int vetorTroca2[numeroN];
+                 long int vetorComp2[numeroN];
+		 std::chrono::time_point<std::chrono::system_clock> start1, start2, end1, end2;
+
+                 for(int k=0; k<numeroN; k++)
+                 {
+
+                      	leitura(lista,linha, linhas,vetN[k]);
+			start1 = std::chrono::system_clock::now();
+                	arvoreB* arv1;
+			for(it = lista.begin(); it != lista.end(); ++it)
+                  	{	
+				arv1 = new arvoreB(2);
+				arv1->insere(it->getId());
+			}
+			end1 = std::chrono::system_clock::now();
+                        tempoTotal1 += std::chrono::duration_cast<std::chrono::milliseconds>(end1-start1).count();
+			start2 = std::chrono::system_clock::now();
+			arvoreB* arv2;
+                        for(it = lista.begin(); it != lista.end(); ++it)
+                        {
+                                arv2 = new arvoreB(20);
+                                arv2->insere(it->getId());
+                        }
+                        end2 = std::chrono::system_clock::now();
+                        tempoTotal2 += std::chrono::duration_cast<std::chrono::milliseconds>(end2-start2).count();
+			troca = arv1->getTrocas();
+			comp = arv1->getComparacoes();
+			vetorTroca[k] = troca;
+			vetorComp[k] = comp;
+			
+			troca2 = arv2->getTrocas();
+                        comp2 = arv2->getComparacoes();
+                        vetorTroca2[k] = troca2;
+                        vetorComp2[k] = comp2;
+
+		 }
+	 cout<<"----METRICAS ARVORE B --"<<endl;
+
+            saida<<"----METRICAS ARVORE B--"<<endl;
+            for(int k=0; k<numeroN ; k++)
+            {
+
+                cout<<endl<<endl;
+                cout<<" N = " << vetN[k] << ": "<<endl;
+                cout<<"*     METRICAS       *            ARVORE B          *" <<endl;
+                cout<<"*      TROCAS        *"<< vetorTroca[k] << "\t\t\t*" <<endl;
+                cout<<"*     COMPARACOES    *"<< vetorComp[k] <<"\t\t\t*"<<endl;
+
+
+
+                saida<<endl<<endl;
+                saida<<" N = " << vetN[k] << ": "<<endl;
+		saida<<"*     METRICAS       *            ARVORE B          *" <<endl;
+                saida<<"*      TROCAS        *"<< vetorTroca[k] << "\t\t\t*" <<endl;
+                saida<<"*     COMPARACOES    *"<< vetorComp[k] <<"\t\t\t*"<<endl;
+		saida.close();
+
+		cout<<endl<<endl;
+                cout<<" N = " << vetN[k] << ": "<<endl;
+                cout<<"*     METRICAS       *            ARVORE B2          *" <<endl;
+                cout<<"*      TROCAS        *"<< vetorTroca2[k] << "\t\t\t*" <<endl;
+                cout<<"*     COMPARACOES    *"<< vetorComp2[k] <<"\t\t\t*"<<endl;
+
+
+
+                saida2<<endl<<endl;
+                saida2<<" N = " << vetN[k] << ": "<<endl;
+                saida2<<"*     METRICAS       *            ARVORE B          *" <<endl;
+                saida2<<"*      TROCAS        *"<< vetorTroca2[k] << "\t\t\t*" <<endl;
+                saida2<<"*     COMPARACOES    *"<< vetorComp2[k] <<"\t\t\t*"<<endl;
+                saida2.close();
+	    }
+
+	    }
             case 0:
                 break;
             default:
