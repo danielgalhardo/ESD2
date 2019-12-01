@@ -240,7 +240,7 @@ void ArvoreVP::nivelOrdem()
 {
     auxNivelOrdem(this->raiz);
 }
-NoVP* ArvoreVP::bucaNo(int id, string user)
+void ArvoreVP::bucaNo(int id, string user)
 {
     registro *reg = new registro();
     reg->setId(id);
