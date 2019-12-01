@@ -1,0 +1,9 @@
+----METRICAS LZW --
+
+
+ N = 1000: 
+*     METRICAS       *            LZW           
+*     TOTAL BYTES    *0			*
+*  TOTAL BYTES COMP  *0			*
+*     RAZAO COMP     *0			* 
+*     TEMPO TOTAL    *0 ms 			* 
